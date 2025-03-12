@@ -1,4 +1,4 @@
-package fish.payara.resource.repository;
+package fish.payara.resource.repository.mock;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -9,19 +9,19 @@ import java.util.function.Predicate;
 
 import fish.payara.resource.model.Game;
 
-public class GameRepository {
+public class MockGameRepository {
 
         private List<Game> gamelist;
-        private static GameRepository instance;
+        private static MockGameRepository instance;
 
-        public static GameRepository getInstance() {
+        public static MockGameRepository getInstance() {
                 if (instance == null) {
-                        instance = new GameRepository();
+                        instance = new MockGameRepository();
                 }
                 return instance;
         }
 
-        private GameRepository() {
+        private MockGameRepository() {
                 gamelist = new ArrayList<>();
 
                 gamelist.addAll(Arrays.asList(
