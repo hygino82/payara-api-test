@@ -3,6 +3,7 @@ package fish.payara.resource.service;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import fish.payara.resource.dto.RequestGameDTO;
@@ -61,7 +62,7 @@ public class GameService {
 
         final Predicate<Game> buscaPorId = g -> g.getId() == id;
 
-        final var res = repository.getGamelist().stream().filter(buscaPorId).findFirst();
+        final Optional<Game> res = repository.getGamelist().stream().filter(buscaPorId).findFirst();
 
         if (res.isEmpty()) {
             throw new GameNotFoundException("Impossível atualizar o jogo, o Id:" + id + " não existe!");
@@ -72,5 +73,15 @@ public class GameService {
         entity.setUpdateAt(LocalDateTime.now());
 
         return new ResponseGameDTO(entity);
+    }
+
+    public ResponseGameDTO findGameById(long id) {
+        final Optional<Game> res = repository.getGamelist().stream().filter(g -> g.getId() == id).findFirst();
+
+        if (res.isEmpty()) {
+            throw new GameNotFoundException("Não existe  jogo com o Id:" + id);
+        }
+
+        return new ResponseGameDTO(res.get());
     }
 }

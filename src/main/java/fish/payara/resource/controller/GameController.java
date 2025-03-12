@@ -58,4 +58,16 @@ public class GameController {
 
         }
     }
+
+    @GET
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response findGameById(@PathParam("id") long id) {
+        try {
+            final ResponseGameDTO response = service.findGameById(id);
+            return Response.status(Response.Status.OK).entity(response).build();
+        } catch (GameNotFoundException ex) {
+            return Response.status(Response.Status.NOT_FOUND).entity(ex.getMessage()).build();
+        }
+    }
 }
