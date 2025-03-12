@@ -1,6 +1,7 @@
 package fish.payara.resource.service;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 
 import fish.payara.resource.dto.RequestGameDTO;
@@ -14,7 +15,7 @@ public class GameService {
 
     public List<ResponseGameDTO> getGamelist() {
         final List<Game> res = repository.getGamelist();
-        return res.stream().map(ResponseGameDTO::new).toList();
+        return res.stream().map(ResponseGameDTO::new).sorted(sortByName()).toList();
     }
 
     public ResponseGameDTO insertGame(RequestGameDTO dto) {
@@ -32,4 +33,23 @@ public class GameService {
         entity.setReleaseDate(dto.releaseDate());
     }
 
+    /*private Comparator<ResponseGameDTO> sortById() {
+        return new Comparator<ResponseGameDTO>() {
+
+            @Override
+            public int compare(ResponseGameDTO game1, ResponseGameDTO game2) {
+                return game1.id().compareTo(game2.id());
+            }
+        };
+    }*/
+
+    private Comparator<ResponseGameDTO> sortByName() {
+        return new Comparator<ResponseGameDTO>() {
+
+            @Override
+            public int compare(ResponseGameDTO game1, ResponseGameDTO game2) {
+                return game1.name().compareTo(game2.name());
+            }
+        };
+    }
 }
