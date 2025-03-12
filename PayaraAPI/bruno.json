@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "JakartaApi",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

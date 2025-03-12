@@ -1,0 +1,20 @@
+meta {
+  name: Insert console
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{host}}/console
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "PlaySation 2222",
+    "company": "Sony",
+    "releaseDate": "2020-11-12",
+    "imageUrl": "https://pt.wikipedia.org/wiki/PlayStation_5#/media/Ficheiro:Black_and_white_Playstation_5_base_edition_with_controller.png"
+  }
+}
