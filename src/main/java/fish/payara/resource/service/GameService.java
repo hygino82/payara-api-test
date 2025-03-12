@@ -1,24 +1,31 @@
 package fish.payara.resource.service;
 
 import java.time.LocalDateTime;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 
 import fish.payara.resource.dto.RequestGameDTO;
 import fish.payara.resource.dto.ResponseGameDTO;
 import fish.payara.resource.model.Game;
 import fish.payara.resource.repository.GameRepository;
+import fish.payara.resource.repository.IGameRepository;
 import fish.payara.resource.service.exceptions.GameNotFoundException;
+import jakarta.inject.Inject;
 
 public class GameService {
 
     private final GameRepository repository = GameRepository.getInstance();
 
+    private final IGameRepository gameRepository;
+
+    @Inject
+    public GameService(IGameRepository gameRepository) {
+        this.gameRepository = gameRepository;
+    }
+
     public List<ResponseGameDTO> getGamelist() {
-        final List<Game> res = repository.getGamelist();
-        return res.stream().map(ResponseGameDTO::new).sorted(sortByName()).toList();
+        final List<Game> res = gameRepository.findAllGames();
+        return res.stream().map(ResponseGameDTO::new).toList();
     }
 
     public ResponseGameDTO insertGame(RequestGameDTO dto) {
@@ -26,7 +33,7 @@ public class GameService {
         dtoToEntity(dto, entity);
         entity.setCreateAt(LocalDateTime.now());
 
-        return new ResponseGameDTO(repository.insert(entity));
+        return new ResponseGameDTO(gameRepository.insertGame(entity));
     }
 
     private void dtoToEntity(RequestGameDTO dto, Game entity) {
@@ -36,33 +43,10 @@ public class GameService {
         entity.setReleaseDate(dto.releaseDate());
     }
 
-    /*
-     * private Comparator<ResponseGameDTO> sortById() {
-     * return new Comparator<ResponseGameDTO>() {
-     * 
-     * @Override
-     * public int compare(ResponseGameDTO game1, ResponseGameDTO game2) {
-     * return game1.id().compareTo(game2.id());
-     * }
-     * };
-     * }
-     */
-
-    private Comparator<ResponseGameDTO> sortByName() {
-        return new Comparator<ResponseGameDTO>() {
-
-            @Override
-            public int compare(ResponseGameDTO game1, ResponseGameDTO game2) {
-                return game1.name().compareTo(game2.name());
-            }
-        };
-    }
 
     public ResponseGameDTO updateGame(long id, RequestGameDTO dto) {
 
-        final Predicate<Game> buscaPorId = g -> g.getId() == id;
-
-        final Optional<Game> res = repository.getGamelist().stream().filter(buscaPorId).findFirst();
+        final Optional<Game> res = gameRepository.findGameById(id);
 
         if (res.isEmpty()) {
             throw new GameNotFoundException("Impossível atualizar o jogo, o Id:" + id + " não existe!");
@@ -70,13 +54,12 @@ public class GameService {
 
         Game entity = res.get();
         dtoToEntity(dto, entity);
-        entity.setUpdateAt(LocalDateTime.now());
-
-        return new ResponseGameDTO(entity);
+        //entity.setUpdateAt(LocalDateTime.now());
+        return new ResponseGameDTO(gameRepository.updateGame(id, entity));
     }
 
     public ResponseGameDTO findGameById(long id) {
-        final Optional<Game> res = repository.getGamelist().stream().filter(g -> g.getId() == id).findFirst();
+        final Optional<Game> res = gameRepository.findGameById(id);
 
         if (res.isEmpty()) {
             throw new GameNotFoundException("Não existe  jogo com o Id:" + id);
@@ -86,6 +69,6 @@ public class GameService {
     }
 
     public boolean removeGameById(long id) {
-        return repository.removeGameById(id);
+        return gameRepository.removeGame(id);
     }
 }
