@@ -1,0 +1,20 @@
+meta {
+  name: Update game
+  type: http
+  seq: 3
+}
+
+put {
+  url: {{host}}/game/1
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "imageUrl": "https://www.ign.com/games/game-update.png",
+    "name": "Jogo Atualizado",
+    "publisher": "KONAMI UPDATE",
+    "releaseDate": "2022-02-22"
+  }
+}
