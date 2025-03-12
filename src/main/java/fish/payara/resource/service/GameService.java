@@ -7,14 +7,11 @@ import java.util.Optional;
 import fish.payara.resource.dto.RequestGameDTO;
 import fish.payara.resource.dto.ResponseGameDTO;
 import fish.payara.resource.model.Game;
-import fish.payara.resource.repository.GameRepository;
 import fish.payara.resource.repository.IGameRepository;
 import fish.payara.resource.service.exceptions.GameNotFoundException;
 import jakarta.inject.Inject;
 
 public class GameService {
-
-    private final GameRepository repository = GameRepository.getInstance();
 
     private final IGameRepository gameRepository;
 

@@ -1,7 +1,8 @@
-package fish.payara.resource.repository;
+package fish.payara.resource.repository.impl;
 
 import fish.payara.resource.config.PostgresConfig;
 import fish.payara.resource.model.Game;
+import fish.payara.resource.repository.IGameRepository;
 import fish.payara.resource.repository.exception.DatabaseException;
 
 import java.sql.*;
