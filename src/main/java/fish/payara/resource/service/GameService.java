@@ -84,4 +84,8 @@ public class GameService {
 
         return new ResponseGameDTO(res.get());
     }
+
+    public boolean removeGameById(long id) {
+        return repository.removeGameById(id);
+    }
 }

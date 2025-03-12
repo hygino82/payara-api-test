@@ -8,6 +8,7 @@ import fish.payara.resource.service.GameService;
 import fish.payara.resource.service.exceptions.GameNotFoundException;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
@@ -69,5 +70,17 @@ public class GameController {
         } catch (GameNotFoundException ex) {
             return Response.status(Response.Status.NOT_FOUND).entity(ex.getMessage()).build();
         }
+    }
+
+    @DELETE
+    @Path("/{id}")
+    public Response removeGameById(@PathParam("id") long id) {
+        final boolean res = service.removeGameById(id);
+
+        if (res) {
+            return Response.status(Response.Status.NO_CONTENT).build();
+        }
+
+        return Response.status(Response.Status.BAD_REQUEST).entity("Jogo não encontrado!").build();
     }
 }

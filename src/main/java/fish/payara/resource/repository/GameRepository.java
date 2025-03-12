@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
 
 import fish.payara.resource.model.Game;
 
@@ -97,5 +98,10 @@ public class GameRepository {
                 game.setId((long) (Math.random() * 1000));
                 gamelist.add(game);
                 return game;
+        }
+
+        public boolean removeGameById(long id) {
+                final Predicate<Game> buscaPorId = g -> g.getId() == id;
+                return gamelist.removeIf(buscaPorId);
         }
 }
